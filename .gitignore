@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+venv/
+.venv/
+.git
+*.egg-info/
+
+# Environment — NEVER commit this
+.env
+
+# Vector DB — too large for git
+chroma_db/
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
