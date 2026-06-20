@@ -1,0 +1,16 @@
+Artificial intelligence is transforming the technology industry.
+Companies are investing heavily in machine learning and AI research.
+
+Large language models like GPT and Claude can understand and generate
+human-like text. They are trained on massive datasets containing
+billions of words from the internet, books, and other sources.
+
+Retrieval-Augmented Generation (RAG) is a technique that combines
+the power of large language models with external knowledge bases.
+Instead of relying solely on training data, RAG systems retrieve
+relevant documents and use them to generate more accurate answers.
+
+Vector databases store information as numerical representations
+called embeddings. These embeddings capture the semantic meaning
+of text, allowing similarity search based on meaning rather than
+exact keyword matching.
