@@ -1,4 +1,3 @@
-# app/core/chunker.py
 import logging
 from pathlib import Path
 
