@@ -20,3 +20,4 @@ chroma_db/
 # IDE
 .vscode/
 .idea/
+.coverage

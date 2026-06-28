@@ -19,9 +19,6 @@ class DocumentChunker:
     """
     Responsible for ONE thing:
     Load a file from disk → return a list of chunks.
-
-    Nothing else. No embeddings. No vector store.
-    Just loading and splitting.
     """
 
     def __init__(self):
@@ -34,13 +31,7 @@ class DocumentChunker:
         )
 
     def load(self, file_path: str) -> list[Document]:
-        """
-        Load a file from disk into LangChain Document objects.
-
-        A Document has two things:
-          - page_content : the raw text
-          - metadata     : dict with source, page number etc.
-        """
+        """Load a file from disk into LangChain Document objects."""
         path = Path(file_path)
 
         if not path.exists():
@@ -62,18 +53,13 @@ class DocumentChunker:
         return documents
 
     def chunk(self, documents: list[Document]) -> list[Document]:
-        """
-        Split loaded documents into smaller chunks.
-        """
+        """Split loaded documents into smaller chunks."""
         chunks = self.splitter.split_documents(documents)
         logger.info(f"Split into {len(chunks)} chunks")
         return chunks
 
     def load_and_chunk(self, file_path: str) -> list[Document]:
-        """
-        Convenience method — load + chunk in one call.
-        This is what the rest of the app uses.
-        """
+        """Convenience method — load + chunk in one call."""
         documents = self.load(file_path)
         chunks = self.chunk(documents)
         return chunks
