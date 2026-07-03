@@ -1,0 +1,24 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# Virtual environment — never copy into image
+venv/
+.venv/
+
+# Environment — secrets never go into images
+.env
+
+# Vector DB — mounted as volume at runtime
+chroma_db/
+
+# Tests — not needed in production image
+tests/
+
+# Dev files
+docker-compose.yml
+.dockerignore
+README.md
+pytest.ini
