@@ -14,8 +14,6 @@ class Settings(BaseSettings):
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     model_name: str = "mistralai/mistral-7b-instruct:free"
 
-    embedding_model: str = "all-MiniLM-L6-v2"
-
     chroma_persist_dir: str = "./chroma_db"
     collection_name: str = "rag_documents"
 
