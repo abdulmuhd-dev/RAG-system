@@ -22,6 +22,9 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 
 COPY --chown=appuser:appuser app/ ./app/
 
+RUN mkdir -p /app/chroma_db && \
+    chown -R appuser:appuser /app/chroma_db
+
 USER appuser
 
 EXPOSE 8000

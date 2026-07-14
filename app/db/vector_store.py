@@ -4,11 +4,36 @@ from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.vectorstores import VectorStoreRetriever
-
+from langchain_core.embeddings import Embeddings
 from app.config import get_settings
 
 logger = logging.getLogger(__name__)
 
+
+class ONNXEmbeddingWrapper(Embeddings):
+    """
+    Wraps ChromaDB's ONNXMiniLM_L6_V2 to satisfy
+    LangChain's Embeddings interface.
+
+    LangChain expects:
+      embed_documents(texts) → list[list[float]]
+      embed_query(text)      → list[float]
+
+    ChromaDB's ONNX function expects:
+      model(texts)           → list[list[float]]
+
+    This wrapper bridges the two interfaces.
+    """
+    def __init__(self):
+        self.model = ONNXMiniLM_L6_V2()
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        """Embed a list of document chunks."""
+        return self.model(texts)
+
+    def embed_query(self, text: str) -> list[float]:
+        """Embed a single query string."""
+        return self.model([text])[0]
 
 class VectorStore:
     """
@@ -25,9 +50,7 @@ class VectorStore:
             f"persist_dir={settings.chroma_persist_dir}"
         )
 
-  
-        embedding_function = ONNXMiniLM_L6_V2()
-
+        embedding_function = ONNXEmbeddingWrapper()
         self.store = Chroma(
             collection_name=settings.collection_name,
             embedding_function=embedding_function,

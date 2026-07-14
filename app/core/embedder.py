@@ -1,9 +1,5 @@
 import logging
-from chromadb.utils.embedding_functions import (
-    ONNXMiniLM_L6_V2,
-)
-
-logger = logging.getLogger(__name__)
+from app.db.vector_store import ONNXEmbeddingWrapper
 
 
 class Embedder:
@@ -19,12 +15,12 @@ class Embedder:
 
     def __init__(self):
         logger.info("Loading ONNX embedding model")
-        self.model = ONNXMiniLM_L6_V2()
+        self.model = ONNXEmbeddingWrapper()
         logger.info("Embedding model loaded successfully")
 
-    def get_model(self):
+    def get_model(self) -> ONNXEmbeddingWrapper:
         return self.model
 
     def embed_text(self, text: str) -> list[float]:
         """Embed a single text — useful for testing."""
-        return self.model([text])[0]
+        return self.model.embed_query(text)
