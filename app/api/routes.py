@@ -3,7 +3,7 @@ import os
 import tempfile
 
 from flask import Blueprint, request, jsonify
-
+from prometheus_flask_exporter import PrometheusMetrics
 from app.core.chunker import DocumentChunker
 from app.core.generator import RAGGenerator
 from app.db.vector_store import VectorStore
@@ -11,6 +11,8 @@ from app.db.vector_store import VectorStore
 logger = logging.getLogger(__name__)
 
 api_bp = Blueprint("api", __name__)
+
+metrics = PrometheusMetrics(api_bp)
 
 ALLOWED_EXTENSIONS = {".pdf", ".txt"}
 
