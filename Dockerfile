@@ -1,4 +1,3 @@
-
 FROM python:3.12-slim AS builder
 
 WORKDIR /app
@@ -37,8 +36,8 @@ HEALTHCHECK --interval=30s \
 
 CMD ["gunicorn", \
      "--bind", "0.0.0.0:8000", \
-     "--workers", "2", \
-     "--timeout", "120", \
+     "--workers", "1", \
+     "--timeout", "300", \
      "--access-logfile", "-", \
      "--error-logfile", "-", \
      "app.main:create_app()"]

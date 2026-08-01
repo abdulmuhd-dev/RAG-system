@@ -1,5 +1,8 @@
+stream_over_http_enabled: true
+
 server:
   http_listen_port: 3200
+  log_level: info
 
 distributor:
   receivers:
@@ -10,14 +13,34 @@ distributor:
         http:
           endpoint: 0.0.0.0:4318
 
+ingester:
+  trace_idle_period: 10s
+  max_block_bytes: 1_000_000
+  max_block_duration: 5m
+
 storage:
   trace:
     backend: local
     local:
-      path: /tmp/tempo/blocks
+      path: /var/tempo/blocks
     wal:
-      path: /tmp/tempo/wal
+      path: /var/tempo/wal
+    pool:
+      max_workers: 100
+      queue_depth: 10000
 
 compactor:
-  compaction:
-    block_retention: 1h
+  ring:
+    kvstore:
+      store: memberlist
+
+memberlist:
+  join_members: []
+
+metrics_generator:
+  registry:
+    external_labels:
+      source: tempo
+      cluster: local
+  storage:
+    path: /var/tempo/generator/wal
