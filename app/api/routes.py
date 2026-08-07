@@ -1,9 +1,11 @@
 import logging
 import os
 import tempfile
+import time
 
 from flask import Blueprint, request, jsonify
-from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_client import Counter, Histogram, Gauge
+
 from app.core.chunker import DocumentChunker
 from app.core.generator import RAGGenerator
 from app.db.vector_store import VectorStore
@@ -12,9 +14,44 @@ logger = logging.getLogger(__name__)
 
 api_bp = Blueprint("api", __name__)
 
-metrics = PrometheusMetrics(api_bp)
-
 ALLOWED_EXTENSIONS = {".pdf", ".txt"}
+
+DOCUMENTS_INGESTED = Counter(
+    "rag_documents_ingested_total",
+    "Total number of documents successfully ingested",
+    ["filename_extension"]
+)
+
+CHUNKS_CREATED = Counter(
+    "rag_chunks_created_total",
+    "Total number of chunks created during ingestion"
+)
+
+INGESTION_ERRORS = Counter(
+    "rag_ingestion_errors_total",
+    "Total number of failed document ingestions"
+)
+
+ANSWER_LATENCY = Histogram(
+    "rag_answer_latency_seconds",
+    "Time taken to generate an answer",
+    buckets=[0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0]
+)
+
+QUESTIONS_ASKED = Counter(
+    "rag_questions_asked_total",
+    "Total number of questions asked"
+)
+
+QUESTION_ERRORS = Counter(
+    "rag_question_errors_total",
+    "Total number of failed question answers"
+)
+
+ACTIVE_REQUESTS = Gauge(
+    "rag_active_requests",
+    "Number of requests currently being processed"
+)
 
 
 def allowed_file(filename: str) -> bool:
@@ -26,9 +63,7 @@ def allowed_file(filename: str) -> bool:
 def health_check():
     """
     Liveness probe endpoint.
-
-    Kubernetes calls this every 30s to confirm the pod is alive.
-    Must return 200 or K8s will restart the pod.
+    Kubernetes calls this every 30s to confirm pod is alive.
     Keep it lightweight — no DB calls, no heavy logic.
     """
     return jsonify({"status": "healthy"}), 200
@@ -37,8 +72,7 @@ def health_check():
 @api_bp.post("/ingest")
 def ingest_document():
     """
-    Upload a document and index it into the vector store.
-
+    Upload and index a document into the vector store.
     Expects: multipart/form-data with a 'file' field
     Returns: chunk count and filename on success
     """
@@ -63,11 +97,16 @@ def ingest_document():
         tmp_path = tmp.name
 
     try:
+        ACTIVE_REQUESTS.inc()
+
         chunker = DocumentChunker()
         vector_store = VectorStore()
 
         chunks = chunker.load_and_chunk(tmp_path)
         vector_store.add_documents(chunks)
+
+        DOCUMENTS_INGESTED.labels(filename_extension=suffix).inc()
+        CHUNKS_CREATED.inc(len(chunks))
 
         logger.info(f"Ingested '{file.filename}' → {len(chunks)} chunks")
 
@@ -78,6 +117,7 @@ def ingest_document():
         }), 201
 
     except Exception as e:
+        INGESTION_ERRORS.inc()
         logger.error(f"Ingestion failed: {e}")
         return jsonify({
             "error": "Ingestion failed",
@@ -85,6 +125,7 @@ def ingest_document():
         }), 500
 
     finally:
+        ACTIVE_REQUESTS.dec()
         os.unlink(tmp_path)
 
 
@@ -92,7 +133,6 @@ def ingest_document():
 def ask_question():
     """
     Ask a question against ingested documents.
-
     Expects: JSON body { "question": "..." }
     Returns: question + answer pair
     """
@@ -103,9 +143,16 @@ def ask_question():
 
     question = data["question"].strip()
 
+    ACTIVE_REQUESTS.inc()
+    QUESTIONS_ASKED.inc()
+
+    start_time = time.time()
+
     try:
         generator = RAGGenerator()
         answer = generator.answer(question)
+
+        ANSWER_LATENCY.observe(time.time() - start_time)
 
         return jsonify({
             "question": question,
@@ -113,8 +160,12 @@ def ask_question():
         }), 200
 
     except Exception as e:
+        QUESTION_ERRORS.inc()
         logger.error(f"Generation failed: {e}")
         return jsonify({
             "error": "Generation failed",
             "detail": str(e)
         }), 500
+
+    finally:
+        ACTIVE_REQUESTS.dec()

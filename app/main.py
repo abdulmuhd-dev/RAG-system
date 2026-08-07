@@ -2,6 +2,8 @@ import logging
 
 from flask import Flask
 from flask_cors import CORS
+from prometheus_client import make_wsgi_app
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 from app.api.routes import api_bp
 
@@ -17,24 +19,19 @@ def create_app() -> Flask:
     """
     Application factory pattern.
 
-    WHY a factory function instead of a global app object?
-
-      1. TESTING — tests call create_app() to get a fresh
-         isolated instance. No shared state between tests.
-
-      2. MULTIPLE CONFIGS — create_app("testing"),
-         create_app("production") can behave differently.
-
-      3. CIRCULAR IMPORTS — global app object causes import
-         order issues in larger projects. Factory avoids this.
-
-    This pattern is in virtually every production Flask codebase.
+    Mounts /metrics at the root level using WSGI middleware.
+    This keeps /metrics separate from /api/v1/* routes
+    and follows Prometheus convention exactly.
     """
     app = Flask(__name__)
-
     CORS(app)
 
     app.register_blueprint(api_bp, url_prefix="/api/v1")
+
+    app.wsgi_app = DispatcherMiddleware(
+        app.wsgi_app,
+        {"/metrics": make_wsgi_app()}
+    )
 
     logger.info("Flask app created successfully")
     return app
