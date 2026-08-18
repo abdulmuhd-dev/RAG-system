@@ -21,3 +21,7 @@ chroma_db/
 .vscode/
 .idea/
 .coverage
+terraform/*.tfvars
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup

@@ -1,0 +1,2 @@
+openrouter_api_key = "your_actual_key_here"
+model_name         = "openrouter/free" #  recomended free model usage by openrouter
