@@ -68,7 +68,7 @@ output "secret_arn" {
   value       = aws_secretsmanager_secret.openrouter_api_key.arn
 }
 
-output "argocd_server_url" {
-  description = "ArgoCD server URL — run after apply to get the ALB URL"
-  value       = "kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'"
+output "alb_controller_role_arn" {
+  description = "ALB-Controller IAM Role ARN"
+  value = aws_iam_role.alb_controller.arn
 }

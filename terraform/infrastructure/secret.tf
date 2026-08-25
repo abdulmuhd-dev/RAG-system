@@ -5,10 +5,6 @@ resource "aws_secretsmanager_secret" "openrouter_api_key" {
   # prevents accidental deletion
   recovery_window_in_days = 7
 
-  lifecycle {
-    prevent_destroy = true
-  }
-
   tags = {
     Name = "rag-system-openrouter-api-key"
   }

@@ -26,6 +26,14 @@ resource "aws_eks_cluster" "main" {
     aws_iam_role_policy_attachment.eks_cluster_policy
   ]
 
+  lifecycle { 
+    # SPECIAL INSTRUCTION BEFORE YOU DESTROY THIS RESOURCES
+    # First, run "terraform destroy" in "k8s_resource/"
+    # Then set this to "false" to compeletely..
+    # destroy the "infrastructure/" resources.
+    prevent_destroy = true
+  } 
+
   tags = {
     Name = var.cluster_name
   }
@@ -57,7 +65,7 @@ resource "aws_eks_node_group" "main" {
     aws_iam_role_policy_attachment.ecr_read_only,
     aws_iam_role_policy_attachment.ebs_csi_policy,
   ]
-
+ 
   tags = {
     Name = "${var.cluster_name}-nodes"
   }

@@ -21,7 +21,8 @@ chroma_db/
 .vscode/
 .idea/
 .coverage
-terraform/*.tfvars
-terraform/.terraform/
-terraform/*.tfstate
-terraform/*.tfstate.backup
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfvars
+k8s/secret.yml

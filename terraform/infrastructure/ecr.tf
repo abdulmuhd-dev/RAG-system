@@ -10,10 +10,6 @@ resource "aws_ecr_repository" "rag_system" {
     encryption_type = "AES256"
   }
 
-  lifecycle {
-    prevent_destroy = true
-  }
-
   tags = {
     Name = "rag-system"
   }

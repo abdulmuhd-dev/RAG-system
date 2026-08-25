@@ -2,10 +2,6 @@ terraform {
   required_version = ">= 1.0"
 
   required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "~> 2.0"
@@ -21,32 +17,28 @@ terraform {
   }
   backend "s3" {
     bucket  = "rag-system-tfstate-617711905688"
-    key     = "rag-system/terraform.tfstate"
+    key     = "k8s_resources/terraform.tfstate"
     region  = "us-east-1"
     encrypt = true
   }
 }
 
-provider "aws" {
-  region = var.aws_region
+# Read /infrastructure state
+data "terraform_remote_state" "infrastructure" {
+  backend = "s3"
 
-  default_tags {
-    tags = {
-      Project     = "rag-system"
-      Environment = "production"
-      ManagedBy   = "terraform"
-      Owner       = "abdulmuhd-dev"
-    }
+  config = {
+    bucket  = "rag-system-tfstate-617711905688"
+    key     = "infrastructure/terraform.tfstate"
+    region  = "us-east-1"
   }
 }
 
 # Connects Terraform to EKS cluster so it can
 # create K8s resources (namespaces, secrets, etc.)
 provider "kubernetes" {
-  host                   = aws_eks_cluster.main.endpoint
-  cluster_ca_certificate = base64decode(
-    aws_eks_cluster.main.certificate_authority[0].data
-  )
+  host                   = data.terraform_remote_state.infrastructure.outputs.cluster_endpoint
+  cluster_ca_certificate = base64decode(data.terraform_remote_state.infrastructure.outputs.cluster_certificate_authority)
 
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
@@ -55,7 +47,7 @@ provider "kubernetes" {
       "eks",
       "get-token",
       "--cluster-name",
-      aws_eks_cluster.main.name,
+      data.terraform_remote_state.infrastructure.outputs.cluster_name,
       "--region",
       var.aws_region
     ]
@@ -66,10 +58,8 @@ provider "kubernetes" {
 # install Helm charts (ArgoCD, ALB Controller, etc.)
 provider "helm" {
   kubernetes {
-    host                   = aws_eks_cluster.main.endpoint
-    cluster_ca_certificate = base64decode(
-      aws_eks_cluster.main.certificate_authority[0].data
-    )
+    host                   = data.terraform_remote_state.infrastructure.outputs.cluster_endpoint
+    cluster_ca_certificate = base64decode(data.terraform_remote_state.infrastructure.outputs.cluster_certificate_authority)
 
     exec {
       api_version = "client.authentication.k8s.io/v1beta1"
@@ -78,7 +68,7 @@ provider "helm" {
         "eks",
         "get-token",
         "--cluster-name",
-        aws_eks_cluster.main.name,
+        data.terraform_remote_state.infrastructure.outputs.cluster_name,
         "--region",
         var.aws_region
       ]

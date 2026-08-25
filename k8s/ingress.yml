@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rag-api-ingress
+  namespace: rag-system
+  annotations:
+    # internet-facing ALB (not internal)
+    alb.ingress.kubernetes.io/scheme: internet-facing
+
+    # shared ALB
+    alb.ingress.kubernetes.io/group.name: platform
+
+    # ALB target type
+    alb.ingress.kubernetes.io/target-type: ip
+
+    # health check path for ALB
+    alb.ingress.kubernetes.io/healthcheck-path: /api/v1/health
+
+    # Health check endpoint
+    alb.ingress.kubernetes.io/healthcheck-path: /api/v1/health
+
+spec:
+  # tells K8s to use AWS ALB Controller
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /api/v1
+            pathType: Prefix
+            backend:
+              service:
+                name: rag-api-service
+                port:
+                  number: 80
