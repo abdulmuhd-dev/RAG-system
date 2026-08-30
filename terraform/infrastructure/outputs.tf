@@ -72,3 +72,8 @@ output "alb_controller_role_arn" {
   description = "ALB-Controller IAM Role ARN"
   value = aws_iam_role.alb_controller.arn
 }
+
+output "github_actions_role_arn" {
+  description = "IAM role ARN for GitHub Actions — add to GitHub environment variables"
+  value       = aws_iam_role.github_actions.arn
+}

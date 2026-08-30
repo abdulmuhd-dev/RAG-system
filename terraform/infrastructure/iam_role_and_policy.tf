@@ -146,3 +146,81 @@ resource "aws_iam_role_policy_attachment" "alb_controller" {
   policy_arn = aws_iam_policy.alb_controller.arn
   role       = aws_iam_role.alb_controller.name
 }
+
+# Github Actions IAM Role
+resource "aws_iam_role" "github_actions" {
+  name = "${var.cluster_name}-github-actions-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.github.arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+          }
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" = [
+              "repo:abdulmuhd-dev/RAG-system:ref:refs/heads/main",
+              "repo:abdulmuhd-dev/RAG-system:environment:production"
+            ]
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name = "${var.cluster_name}-github-actions-role"
+  }
+}
+
+# Minimal permissions — only what CI/CD actually needs
+resource "aws_iam_policy" "github_actions" {
+  name        = "${var.cluster_name}-github-actions-policy"
+  description = "Minimal permissions for GitHub Actions CI/CD"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        # ECR — push images
+        Sid    = "ECRPushAccess"
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:PutImage",
+          "ecr:DescribeImages",
+          "ecr:ListImages"
+        ]
+        Resource = "*"
+      },
+      {
+        # EKS — update kubeconfig + describe cluster
+        Sid    = "EKSAccess"
+        Effect = "Allow"
+        Action = [
+          "eks:DescribeCluster",
+          "eks:ListClusters"
+        ]
+        Resource = "arn:aws:eks:${var.aws_region}:${data.aws_caller_identity.current.account_id}:cluster/${var.cluster_name}"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions" {
+  policy_arn = aws_iam_policy.github_actions.arn
+  role       = aws_iam_role.github_actions.name
+}
