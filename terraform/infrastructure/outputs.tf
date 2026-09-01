@@ -77,3 +77,7 @@ output "github_actions_role_arn" {
   description = "IAM role ARN for GitHub Actions — add to GitHub environment variables"
   value       = aws_iam_role.github_actions.arn
 }
+
+output "external_secrets_role_arn" {
+  value = aws_iam_role.external_secrets.arn
+}

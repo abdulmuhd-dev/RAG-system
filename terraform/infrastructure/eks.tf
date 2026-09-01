@@ -31,7 +31,7 @@ resource "aws_eks_cluster" "main" {
     # First, run "terraform destroy" in "k8s_resource/"
     # Then set this to "false" to compeletely..
     # destroy the "infrastructure/" resources.
-    prevent_destroy = true
+    prevent_destroy = false
   } 
 
   tags = {
