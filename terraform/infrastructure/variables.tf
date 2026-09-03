@@ -76,3 +76,21 @@ variable "model_name" {
   type        = string
   default     = "mistralai/mistral-7b-instruct:free"
 }
+
+variable "host" {
+  description = "app host address"
+  type = string
+  default = "0.0.0.0"
+}
+
+variable "port" {
+  description = "app server port"
+  type = number
+  default = 8000
+}
+
+variable "debug" {
+  description = "enable/disable debug mode"
+  type = bool
+  default = false
+}

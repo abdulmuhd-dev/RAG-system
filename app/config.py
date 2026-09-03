@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     set to "abc" in .env, the app crashes immediately with a
     clear error instead of silently breaking later.
     """
+    host: str
+    port: int
+    debug: bool
 
     openrouter_api_key: str
     openrouter_base_url: str = "https://openrouter.ai/api/v1"

@@ -6,6 +6,7 @@ from prometheus_client import make_wsgi_app
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 from app.api.routes import api_bp
+from app.config import get_settings
 
 logging.basicConfig(
     level=logging.INFO,
@@ -39,4 +40,8 @@ def create_app() -> Flask:
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(host="0.0.0.0", port=8000, debug=False)
+    settings = get_settings()
+    host = settings.host
+    port = settings.port
+    debug = settings.debug
+    app.run(host=host, port=port, debug=debug)

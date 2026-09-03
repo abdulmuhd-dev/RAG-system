@@ -16,5 +16,8 @@ resource "aws_secretsmanager_secret_version" "openrouter_api_key" {
   secret_string = jsonencode({
     OPENROUTER_API_KEY = var.openrouter_api_key
     MODEL_NAME         = var.model_name
+    HOST = var.host
+    PORT = var.port
+    DEBUG = var.debug
   })
 }
