@@ -1,6 +1,7 @@
 import logging
 from app.db.vector_store import ONNXEmbeddingWrapper
 
+logger = logging.getLogger(__name__)
 
 class Embedder:
     """
