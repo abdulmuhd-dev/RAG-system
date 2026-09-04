@@ -78,6 +78,11 @@ jobs:
           bandit -r app -ll
 
       - name: Run tests with coverage
+        env:
+          HOST: ${{ vars.HOST }}
+          PORT: ${{ vars.PORT }}
+          DEBUG: ${{ vars.DEBUG }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           pytest tests/ \
             --cov=app \
