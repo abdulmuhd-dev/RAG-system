@@ -11,3 +11,6 @@ data:
   TOP_K_RESULTS: "4"
   CHROMA_PERSIST_DIR: "/app/chroma_db"
   COLLECTION_NAME: "rag_documents"
+  HOST: "0.0.0.0"
+  PORT: 8000
+  DEBUG: False
