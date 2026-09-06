@@ -4,20 +4,34 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+RUN python -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip setuptools && \
+    /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 
 FROM python:3.12-slim AS runtime
 
+# Fix OS base vulnerabilties
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    rm -rf /var/lib/apt/list7s/*
+
 RUN useradd --create-home --shell /bin/bash appuser
 
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY --from=builder /opt/venv /opt/venv
+
+# ✅ Remove build tooling — not needed at runtime
+# Eliminates entire class of pip/ensurepip CVEs
+RUN rm -rf /usr/local/lib/python3.12/ensurepip \
+           /usr/local/lib/python3.12/site-packages/* \
+           /usr/local/bin/pip* /usr/local/bin/wheel \
+ && rm -rf /opt/venv/lib/python3.12/site-packages/pip \
+           /opt/venv/lib/python3.12/site-packages/pip-*.dist-info \
+           /opt/venv/bin/pip*
+
 WORKDIR /app
-
-COPY --from=builder /usr/local/lib/python3.12/site-packages \
-                    /usr/local/lib/python3.12/site-packages
-
-COPY --from=builder /usr/local/bin /usr/local/bin
 
 COPY --chown=appuser:appuser app/ ./app/
 
