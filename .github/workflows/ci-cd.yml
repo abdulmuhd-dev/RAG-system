@@ -179,7 +179,7 @@ jobs:
         run: |
           SHORT_SHA="${{ needs.build-and-push.outputs.image-tag }}"
           NEW_IMAGE="${{ vars.ECR_REGISTRY }}/${{ vars.ECR_REPOSITORY }}:${SHORT_SHA}"
-
+          # replace old image with newly created one
           sed -i \
             "s|image:.*|image: ${NEW_IMAGE}|g" \
             k8s/deployment.yml
