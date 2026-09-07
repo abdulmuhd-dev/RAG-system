@@ -13,4 +13,4 @@ data:
   COLLECTION_NAME: "rag_documents"
   HOST: "0.0.0.0"
   PORT: 8000
-  DEBUG: False
+  DEBUG: "False"
