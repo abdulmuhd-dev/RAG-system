@@ -181,7 +181,7 @@ jobs:
           NEW_IMAGE="${{ vars.ECR_REGISTRY }}/${{ vars.ECR_REPOSITORY }}:${SHORT_SHA}"
 
           sed -i \
-            "s|image:.*rag-system:.*|image: ${NEW_IMAGE}|g" \
+            "s|image:.*|image: ${NEW_IMAGE}|g" \
             k8s/deployment.yml
 
           echo "Updated image:"
