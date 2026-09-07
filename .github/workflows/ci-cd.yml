@@ -164,7 +164,7 @@ jobs:
   update-manifest:
     name: Update Kubernetes Manifest
     runs-on: ubuntu-latest
-
+    enviroment: production
     needs: build-and-push
 
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
