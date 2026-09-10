@@ -21,6 +21,16 @@ spec:
       labels:
         app: rag-api
     spec:
+      # pod-level security context
+      # fsGroup ensures mounted volumes are owned
+      # by this group — all containers in the pod
+      # can read/write the volume
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -52,6 +62,14 @@ spec:
                 secretKeyRef:
                   name: rag-secrets
                   key: OPENROUTER_API_KEY
+
+          # container-level security context
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL   # drop all Linux capabilities
 
           resources:
             requests:
