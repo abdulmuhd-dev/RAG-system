@@ -1,0 +1,8 @@
+# Copy to terraform.tfvars and fill in values
+
+aws_region          = "us-east-1"
+domain_name         = <Your Domain Name>
+
+# Fill these AFTER cluster is running (After phase 2 terraform apply on /k8s_resources):
+# rag_alb_hostname   = "k8s-ragsystem-xxx.us-east-1.elb.amazonaws.com"
+# argocd_alb_hostname = "k8s-argocd-xxx.us-east-1.elb.amazonaws.com"
