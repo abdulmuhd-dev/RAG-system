@@ -1,10 +1,8 @@
-# AWS Certificate Manager
 resource "aws_acm_certificate" "main" {
-  domain_name = var.domain_name
+  domain_name = var.domain_name  # abdulmuhd.dpdns.org
 
-  # wildcard covers all subdomains at once
   subject_alternative_names = [
-    "*.${var.domain_name}"
+    "*.${var.domain_name}"       # *.abdulmuhd.dpdns.org
   ]
 
   validation_method = "DNS"
@@ -14,7 +12,6 @@ resource "aws_acm_certificate" "main" {
   }
 }
 
-# automatically create DNS validation records
 resource "aws_route53_record" "cert_validation" {
   for_each = {
     for dvo in aws_acm_certificate.main.domain_validation_options :
@@ -30,9 +27,9 @@ resource "aws_route53_record" "cert_validation" {
   type    = each.value.type
   ttl     = 60
   records = [each.value.record]
+  allow_overwrite = true
 }
 
-# wait until ACM validates the cert
 resource "aws_acm_certificate_validation" "main" {
   certificate_arn = aws_acm_certificate.main.arn
   validation_record_fqdns = [

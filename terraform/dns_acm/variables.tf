@@ -10,6 +10,12 @@ variable "domain_name" {
   default     = "abdulmuhd.dpdns.org"
 }
 
+variable "alb_hostname" {
+  description = "Shared ALB hostname from kubectl get ingress"
+  type        = string
+  default     = ""
+}
+
 variable "rag_alb_hostname" {
   description = "RAG API ALB hostname from kubectl get ingress"
   type        = string

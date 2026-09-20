@@ -13,11 +13,20 @@ output "acm_certificate_arn" {
   value       = aws_acm_certificate.main.arn
 }
 
-output "subdomains" {
+output "your_urls" {
   description = "Your application URLs once DNS propagates"
   value = {
-    rag_api = "https://rag.${var.domain_name}"
-    argocd  = "https://argocd.${var.domain_name}"
- #   grafana = "https://grafana.${var.domain_name}"
+    rag_api = "https://${var.domain_name}/api/v1"
+    argocd  = "https://${var.domain_name}/admin/argocd"
+    health  = "https://${var.domain_name}/api/v1/health"
   }
 }
+
+#output "subdomains" {
+# description = "Your application URLs once DNS propagates"
+#  value = {
+#    rag_api = "https://rag.${var.domain_name}"
+#    argocd  = "https://argocd.${var.domain_name}"
+#   grafana = "https://grafana.${var.domain_name}"
+#  }
+#}

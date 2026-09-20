@@ -16,14 +16,22 @@ metadata:
     # health check path for ALB
     alb.ingress.kubernetes.io/healthcheck-path: /api/v1/health
 
-    # Health check endpoint
-    alb.ingress.kubernetes.io/healthcheck-path: /api/v1/health
+    # HTTPS — listen on both ports
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+
+    # redirect all HTTP → HTTPS
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+
+    # ACM wildcard cert — paste ARN after dns_acm apply
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:us-east-1:617711905688:certificate/4fe77d0e-0567-4558-a1c0-5c1f215e3d27"
+
 
 spec:
   # tells K8s to use AWS ALB Controller
   ingressClassName: alb
   rules:
-    - http:
+    - host: abdulmuhd.dpdns.org
+      http:
         paths:
           - path: /api/v1
             pathType: Prefix
