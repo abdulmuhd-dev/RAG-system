@@ -26,3 +26,4 @@ chroma_db/
 **/*.tfstate.*
 **/*.tfvars
 k8s/secret.yml
+coverage.xml
