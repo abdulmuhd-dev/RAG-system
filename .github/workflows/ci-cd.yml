@@ -83,6 +83,8 @@ jobs:
           DEBUG: ${{ vars.DEBUG }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
+          cat requirements.txt | grep platformdir
+          cat requirements.txt | grep pytest
           pytest tests/ \
             --cov=app \
             --cov-report=term-missing \
