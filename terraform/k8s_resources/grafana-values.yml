@@ -1,0 +1,68 @@
+admin:
+  existingSecret: grafana-admin-secret
+  userKey: gf-admin-user
+  passwordKey: gf-admin-password
+
+ingress:
+  enabled: true
+  ingressClassName: alb
+
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/group.name: platform
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/certificate-arn: ${acm_certificate_arn}
+    alb.ingress.kubernetes.io/healthcheck-path: /api/health
+
+  hosts:
+    - abdulmuhd.dpdns.org
+
+  path: /admin/grafana
+
+grafana.ini:
+  server:
+    root_url: https://abdulmuhd.dpdns.org/admin/grafana
+    serve_from_sub_path: true
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
+        isDefault: true
+        access: proxy
+
+      - name: Loki
+        type: loki
+        url: http://loki-gateway.monitoring.svc.cluster.local
+        access: proxy
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder: RAG System
+        type: file
+        disableDeletion: false
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+persistence:
+  enabled: true
+  storageClassName: gp2
+  size: 5Gi
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+  limits:
+    cpu: 200m
+    memory: 512Mi

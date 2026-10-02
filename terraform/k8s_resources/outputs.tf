@@ -1,6 +1,6 @@
 output "argocd_get_password" {
- description = "Command to get ArgoCD default password"
- value = <<EOD
+  description = "Command to get ArgoCD default password"
+  value       = <<EOD
      kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}"
      | base64 -d && echo
     EOD

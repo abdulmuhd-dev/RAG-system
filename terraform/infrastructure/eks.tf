@@ -26,13 +26,13 @@ resource "aws_eks_cluster" "main" {
     aws_iam_role_policy_attachment.eks_cluster_policy
   ]
 
-  lifecycle { 
+  lifecycle {
     # SPECIAL INSTRUCTION BEFORE YOU DESTROY THIS RESOURCES
     # First, run "terraform destroy" in "k8s_resource/"
     # Then set this to "false" to compeletely..
     # destroy the "infrastructure/" resources.
     prevent_destroy = false
-  } 
+  }
 
   tags = {
     Name = var.cluster_name
@@ -44,8 +44,8 @@ resource "aws_eks_node_group" "main" {
   cluster_name    = aws_eks_cluster.main.name
   node_group_name = "${var.cluster_name}-nodes"
   node_role_arn   = aws_iam_role.eks_nodes.arn
-  subnet_ids = aws_subnet.private[*].id
-  instance_types = [var.node_instance_type]
+  subnet_ids      = aws_subnet.private[*].id
+  instance_types  = [var.node_instance_type]
 
   scaling_config {
     desired_size = var.node_desired_size
@@ -65,7 +65,7 @@ resource "aws_eks_node_group" "main" {
     aws_iam_role_policy_attachment.ecr_read_only,
     aws_iam_role_policy_attachment.ebs_csi_policy,
   ]
- 
+
   tags = {
     Name = "${var.cluster_name}-nodes"
   }
@@ -73,8 +73,8 @@ resource "aws_eks_node_group" "main" {
 
 # EBS CSI Driver handles the provisioning of ebs volume for persistance storage
 resource "aws_eks_addon" "ebs_csi" {
-  cluster_name = aws_eks_cluster.main.name
-  addon_name   = "aws-ebs-csi-driver"
+  cluster_name             = aws_eks_cluster.main.name
+  addon_name               = "aws-ebs-csi-driver"
   service_account_role_arn = aws_iam_role.ebs_csi.arn
 
   depends_on = [

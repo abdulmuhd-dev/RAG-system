@@ -9,4 +9,6 @@ resource "helm_release" "external_secrets" {
   wait             = true
   timeout          = 300
 
+
+
 }

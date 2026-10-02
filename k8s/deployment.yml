@@ -69,7 +69,7 @@ spec:
             readOnlyRootFilesystem: false
             capabilities:
               drop:
-                - ALL   # drop all Linux capabilities
+                - ALL # drop all Linux capabilities
 
           resources:
             requests:

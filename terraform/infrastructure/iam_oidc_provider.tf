@@ -19,7 +19,7 @@ resource "aws_iam_openid_connect_provider" "eks" {
 # This is what allows Github Actions to assume
 # IAM Role without storing credentials
 resource "aws_iam_openid_connect_provider" "github" {
-  url = "https://token.actions.githubusercontent.com"
+  url            = "https://token.actions.githubusercontent.com"
   client_id_list = ["sts.amazonaws.com"]
   thumbprint_list = [
     "6938fd4d98bab03faadb97b34396831e3780aea1",

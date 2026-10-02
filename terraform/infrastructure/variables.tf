@@ -44,7 +44,7 @@ variable "node_instance_type" {
   description = "EC2 instance type for EKS nodes"
   type        = string
   default     = "c7i-flex.large"
-  
+
 }
 
 variable "node_min_size" {
@@ -68,7 +68,7 @@ variable "node_desired_size" {
 variable "openrouter_api_key" {
   description = "OpenRouter API key"
   type        = string
-  sensitive   = true 
+  sensitive   = true
 }
 
 variable "model_name" {
@@ -79,18 +79,30 @@ variable "model_name" {
 
 variable "host" {
   description = "app host address"
-  type = string
-  default = "0.0.0.0"
+  type        = string
+  default     = "0.0.0.0"
 }
 
 variable "port" {
   description = "app server port"
-  type = number
-  default = 8000
+  type        = number
+  default     = 8000
 }
 
 variable "debug" {
   description = "enable/disable debug mode"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
+}
+
+variable "grafana_usr" {
+  description = "Grafana admin username"
+  type        = string
+  sensitive   = true
+}
+
+variable "grafana_pss" {
+  description = "Grafana admin password"
+  type        = string
+  sensitive   = true
 }

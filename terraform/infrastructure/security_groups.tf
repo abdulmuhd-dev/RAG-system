@@ -38,7 +38,7 @@ resource "aws_security_group" "eks_nodes" {
     self        = true
   }
 
-  
+
   ingress {
     description     = "Allow control plane to communicate with nodes"
     from_port       = 1025

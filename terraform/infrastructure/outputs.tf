@@ -70,7 +70,7 @@ output "secret_arn" {
 
 output "alb_controller_role_arn" {
   description = "ALB-Controller IAM Role ARN"
-  value = aws_iam_role.alb_controller.arn
+  value       = aws_iam_role.alb_controller.arn
 }
 
 output "github_actions_role_arn" {

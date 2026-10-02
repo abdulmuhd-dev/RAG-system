@@ -28,9 +28,9 @@ data "terraform_remote_state" "infrastructure" {
   backend = "s3"
 
   config = {
-    bucket  = "rag-system-tfstate-617711905688"
-    key     = "infrastructure/terraform.tfstate"
-    region  = "us-east-1"
+    bucket = "rag-system-tfstate-617711905688"
+    key    = "infrastructure/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 

@@ -36,7 +36,7 @@ resource "helm_release" "argocd" {
         params = {
           # Force HTTP — no redirect.
           "server.insecure" = true
-	  "server.rootpath" = "/admin/argocd"
+          "server.rootpath" = "/admin/argocd"
           "server.basehref" = "/admin/argocd"
         }
       }
