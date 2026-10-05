@@ -32,12 +32,14 @@ datasources:
     datasources:
       - name: Prometheus
         type: prometheus
+        uid: prometheus
         url: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
         isDefault: true
         access: proxy
 
       - name: Loki
         type: loki
+        uid: loki
         url: http://loki-gateway.monitoring.svc.cluster.local
         access: proxy
 
@@ -52,6 +54,9 @@ dashboardProviders:
         disableDeletion: false
         options:
           path: /var/lib/grafana/dashboards/default
+
+dashboardsConfigMaps:
+  default: rag-system-dashboard
 
 persistence:
   enabled: true
