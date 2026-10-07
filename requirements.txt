@@ -59,7 +59,7 @@ langchain-text-splitters==1.1.2
 langgraph==1.2.9
 langgraph-checkpoint==4.1.1
 langgraph-prebuilt==1.1.0
-langgraph-sdk==0.4.2
+langgraph-sdk==0.4.4
 langsmith==0.10.2
 license-expression==30.4.4
 markdown-it-py==4.2.0
@@ -67,7 +67,7 @@ MarkupSafe==3.0.3
 mdurl==0.1.2
 mmh3==5.2.1
 msgpack==1.2.2
-multidict==6.7.1
+multidict==6.9.1
 numpy==2.5.1
 oauthlib==4.0.0
 onnxruntime==1.27.0
@@ -137,7 +137,7 @@ uvloop==0.22.1
 watchfiles==1.2.0
 websocket-client==1.9.0
 websockets==15.0.1
-Werkzeug==3.1.8
+Werkzeug==3.1.9
 xxhash==3.8.1
 yarl==1.24.2
 zstandard==0.25.0
