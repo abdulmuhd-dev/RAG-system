@@ -3,6 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: chroma-pvc
   namespace: rag-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   accessModes:
     - ReadWriteOnce
