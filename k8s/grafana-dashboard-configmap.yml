@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: rag-k8s-dashboard
+  name: rag-system-dashboard
   namespace: monitoring
   labels:
     grafana_dashboard: "1"
