@@ -27,3 +27,5 @@ chroma_db/
 **/*.tfvars
 k8s/secret.yml
 coverage.xml
+terraform/infrastructure/resources_import.sh
+terraform/infrastructure/remove_resources.sh
