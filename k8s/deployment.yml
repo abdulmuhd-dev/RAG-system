@@ -5,6 +5,8 @@ metadata:
   namespace: rag-system
   labels:
     app: rag-api
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   replicas: 2
   selector:
