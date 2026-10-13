@@ -6,7 +6,7 @@ metadata:
   labels:
     app: rag-api
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   replicas: 2
   selector:
