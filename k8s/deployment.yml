@@ -48,7 +48,7 @@ spec:
 
       containers:
         - name: rag-api
-          image: 617711905688.dkr.ecr.us-east-1.amazonaws.com/rag-system:d4c6d850
+          image: 617711905688.dkr.ecr.us-east-1.amazonaws.com/rag-system:d907ed74
           imagePullPolicy: Always
 
           ports:
