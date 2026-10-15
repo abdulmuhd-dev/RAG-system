@@ -68,6 +68,12 @@ def health_check():
     """
     return jsonify({"status": "healthy", "message": "Application is healthy"}), 200
 
+@api_bp.getp("/test")
+def check_test():
+   """
+   test endpoint
+   """
+   return jsonify({"endpoint": "testing"})
 
 @api_bp.post("/ingest")
 def ingest_document():
