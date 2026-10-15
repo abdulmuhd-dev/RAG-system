@@ -66,7 +66,7 @@ def health_check():
     Kubernetes calls this every 30s to confirm pod is alive.
     Keep it lightweight — no DB calls, no heavy logic.
     """
-    return jsonify({"status": "200 ok", "message": "Application is healthy"}), 200
+    return jsonify({"status": "healthy", "message": "Application is healthy"}), 200
 
 @api_bp.post("/ingest")
 def ingest_document():
