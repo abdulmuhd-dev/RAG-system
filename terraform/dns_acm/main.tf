@@ -8,7 +8,7 @@ terraform {
     }
   }
 
-backend "s3" {
+  backend "s3" {
     bucket  = "rag-system-tfstate-617711905688"
     key     = "dns-acm/terraform.tfstate"
     region  = "us-east-1"

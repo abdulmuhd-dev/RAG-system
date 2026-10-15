@@ -1,8 +1,8 @@
 resource "aws_acm_certificate" "main" {
-  domain_name = var.domain_name  # abdulmuhd.dpdns.org
+  domain_name = var.domain_name # abdulmuhd.dpdns.org
 
   subject_alternative_names = [
-    "*.${var.domain_name}"       # *.abdulmuhd.dpdns.org
+    "*.${var.domain_name}" # *.abdulmuhd.dpdns.org
   ]
 
   validation_method = "DNS"
@@ -22,11 +22,11 @@ resource "aws_route53_record" "cert_validation" {
     }
   }
 
-  zone_id = aws_route53_zone.main.zone_id
-  name    = each.value.name
-  type    = each.value.type
-  ttl     = 60
-  records = [each.value.record]
+  zone_id         = aws_route53_zone.main.zone_id
+  name            = each.value.name
+  type            = each.value.type
+  ttl             = 60
+  records         = [each.value.record]
   allow_overwrite = true
 }
 
