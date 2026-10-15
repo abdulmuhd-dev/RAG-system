@@ -629,7 +629,7 @@ data:
           "datasource": { "type": "loki", "uid": "loki" },
           "targets": [
             {
-              "expr": "{namespace=\"rag-system\", container=\"rag-api\"}",
+              "expr": "{kubernetes_namespace_name=\"rag-system\", kubernetes_container_name=\"rag-api\"}",
               "legendFormat": "",
               "refId": "A"
             }
@@ -653,7 +653,7 @@ data:
           "datasource": { "type": "loki", "uid": "loki" },
           "targets": [
             {
-              "expr": "{namespace=\"rag-system\", container=\"rag-api\"} |= \"ERROR\"",
+              "expr": "{kubernetes_namespace_name=\"rag-system\", kubernetes_container_name=\"rag-api\"} |= \"ERROR\"",
               "legendFormat": "",
               "refId": "A"
             }
