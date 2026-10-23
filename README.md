@@ -36,32 +36,9 @@ CI/CD pipeline.
 ---
 
 ## 🔄 RAG Pipeline
-![RAG-system Pipeline](RAG_pipeline.jpg)
+![RAG-system Pipeline](RAG_pipeline.png)
 
 ---
 
 ## 🏗️ Infrastructure — 3 Terraform Layers
-
-terraform/
-├── infrastructure/     # Layer 1 — AWS foundation
-│   ├── vpc.tf          # VPC
-│   ├── eks.tf          # EKS cluster v1.36 + node group
-│   ├── iam_role_and_policy.tf          # IAM roles 
-│   ├── ecr.tf          # ECR repository
-│   ├── secret.tf       # AWS Secrets Manager
-│   └── ..... 
-│
-├── k8s_resources/      # Layer 2 — Kubernetes platform
-│   ├── argocd.tf       # ArgoCD (GitOps)
-│   ├── alb_controller.tf  # AWS ALB Controller
-│   ├── external_secret_operator.tf # External Secrets Operator
-│   ├── prometheus.tf   # kube-prometheus-stack
-│   ├── loki.tf         # Loki (log storage)
-│   ├── fluent_bit.tf   # Fluent Bit DaemonSet
-│   ├── grafana.tf      # Grafana dashboards
-│   ├── metrics_server.tf  # HPA support
-│   └── ...... 
-│
-└── dns_acm/            # Layer 3 — DNS + TLS
-├── route53.tf      # Hosted zone + DNS records
-└── acm.tf          # AWS Certificate Manager for SSL/TLS
+![RAG-system Pipeline](terraform_structure.png)
