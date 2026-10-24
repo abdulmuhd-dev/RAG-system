@@ -57,7 +57,22 @@ kubectl delete application rag-api -n argocd
 cd terraform/dns_acm        && terraform destroy
 cd terraform/k8s_resources  && terraform destroy
 cd terraform/infrastructure && terraform destroy
-
+```
 ---
+
+## 🔐 Security
+
+| Layer | Implementation |
+|-------|----------------|
+| CI/CD auth | OIDC federation (no long-lived AWS credentials) |
+| Pod AWS access | IRSA (IAM Roles for Service Accounts) |
+| Secrets | External Secrets Operator → AWS Secrets Manager |
+| Container | Non-root user, dropped Linux capabilities |
+| Image scanning | Trivy (blocks CRITICAL/HIGH CVEs) |
+| Code scanning | Bandit (Python SAST) |
+| Dependency scanning | pip-audit (CVE detection) |
+| Secret scanning | Gitleaks (pre-push) |
+| Network | EKS nodes in private subnets only |
+| TLS | ACM wildcard cert, HTTP → HTTPS redirect |
 
 ## ♾️ CI/CD Pipeline
