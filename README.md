@@ -75,4 +75,7 @@ cd terraform/infrastructure && terraform destroy
 | Network | EKS nodes in private subnets only |
 | TLS | ACM wildcard cert, HTTP → HTTPS redirect |
 
+---
+
 ## ♾️ CI/CD Pipeline
+![CI/CD pipeline diagram](ci_cd.png)
