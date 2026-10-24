@@ -42,3 +42,18 @@ CI/CD pipeline.
 
 ## 🏗️ Infrastructure — 3 Terraform Layers
 ![RAG-system Pipeline](terraform_structure.png)
+
+### Deploy Order
+
+```bash
+# provision steps 
+cd terraform/infrastructure && terraform apply
+cd terraform/k8s_resources  && terraform apply
+cd terraform/dns_acm        && terraform apply
+cd <project root directory> && kubectl apply -f k8s/argocd-app.yml
+
+# destroy (reverse order)
+kubectl delete application rag-api -n argocd 
+cd terraform/dns_acm        && terraform destroy
+cd terraform/k8s_resources  && terraform destroy
+cd terraform/infrastructure && terraform destroy
