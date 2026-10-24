@@ -57,3 +57,7 @@ kubectl delete application rag-api -n argocd
 cd terraform/dns_acm        && terraform destroy
 cd terraform/k8s_resources  && terraform destroy
 cd terraform/infrastructure && terraform destroy
+
+---
+
+## ♾️ CI/CD Pipeline
