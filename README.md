@@ -1,4 +1,4 @@
-# RAG System — Production AI Platform
+## RAG System — Production AI Platform
 
 A production-grade Retrieval-Augmented Generation (RAG) system
 built with LangChain, ChromaDB, and Flask. Fully deployed on
