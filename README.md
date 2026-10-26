@@ -79,3 +79,29 @@ cd terraform/infrastructure && terraform destroy
 
 ## ♾️ CI/CD Pipeline
 ![CI/CD pipeline diagram](ci_cd.png)
+
+---
+
+## 📊 Observability
+### Metrics (Prometheus)
+Custom RAG metrics exposed at /metrics endpoint:
+
+| Metric | Type | Description |
+|--------|------|-------------|
+| `rag_questions_asked_total` | Counter | Total questions asked |
+| `rag_answer_latency_seconds` | Histogram | LLM response latency (p50/p90/p99) |
+| `rag_documents_ingested_total` | Counter | Documents ingested by file type |
+| `rag_chunks_created_total` | Counter | Total chunks created |
+| `rag_ingestion_errors_total` | Counter | Failed ingestions |
+| `rag_question_errors_total` | Counter | Failed questions |
+| `rag_active_requests` | Gauge | Concurrent requests |
+
+### Logs (Fluent Bit → Loki)
+Fluent Bit DaemonSet
+  → reads /var/log/containers/ on every node
+  → enriches with K8s metadata
+    (namespace, pod, container, node)
+  → ships to Loki
+  → visualized in Grafana
+
+![FluentBit and Loki flow](fluent_bit_loki.png)
