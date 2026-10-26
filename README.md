@@ -108,7 +108,7 @@ Fluent Bit DaemonSet
 
 ### Dashboard
 
-Grafana: "View Dashboard" (https://abdulmuhd.dpdns.org/grafana)
+Grafana: "View Dashboard" (https://abdulmuhd.dpdns.org/admin/grafana)
 
 The dashboard provides the following monitoring features:
 
