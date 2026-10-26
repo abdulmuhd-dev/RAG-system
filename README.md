@@ -144,3 +144,43 @@ The dashboard provides the following monitoring features:
 | `GET /metrics` | Prometheus metrics |
 | `/admin/argocd` | ArgoCD UI |
 | `/admin/grafana` | Grafana dashboard |
+
+---
+
+## ⚡ Quick Start 
+### Local Development 
+
+```bash
+# clone
+git clone https://github.com/abdulmuhd-dev/RAG-system
+cd RAG-system
+
+# setup
+cp .env.example .env
+# add your OPENROUTER_API_KEY to .env
+
+# run locally
+docker compose up -d
+
+# test
+curl http://localhost:8000/api/v1/health
+```
+### Run Tests
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pytest  # runs with 90% coverage gate
+```
+### Deploy To EKS
+
+```bash
+# provision infrastructure
+cd terraform/infrastructure && terraform apply
+cd terraform/k8s_resources  && terraform apply
+cd terraform/dns_acm        && terraform apply
+
+# deploy app (ArgoCD handles this automatically on git push)
+kubectl apply -f k8s/argocd-app.yml
+```
