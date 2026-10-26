@@ -126,3 +126,8 @@ The dashboard provides the following monitoring features:
 - Logging
   - Live log stream
   - Error log filtering
+
+---
+
+## 📁 Project Structure
+![Project folder structure](project_structure.png)
