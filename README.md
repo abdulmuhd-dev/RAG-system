@@ -131,3 +131,16 @@ The dashboard provides the following monitoring features:
 
 ## 📁 Project Structure
 ![Project folder structure](project_structure.png)
+
+---
+
+## 🌐 Live Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/v1/health` | Liveness probe |
+| `POST /api/v1/ingest` | Upload + index document |
+| `POST /api/v1/ask` | Ask a question |
+| `GET /metrics` | Prometheus metrics |
+| `/admin/argocd` | ArgoCD UI |
+| `/admin/grafana` | Grafana dashboard |
