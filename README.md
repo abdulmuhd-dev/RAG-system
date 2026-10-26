@@ -105,3 +105,24 @@ Fluent Bit DaemonSet
   → visualized in Grafana
 
 ![FluentBit and Loki flow](fluent_bit_loki.png)
+
+### Dashboard
+
+Grafana: "View Dashboard" (https://abdulmuhd.dpdns.org/grafana)
+
+The dashboard provides the following monitoring features:
+
+- System Health
+  - Pod status and replica count
+  - HPA scaling activity
+- LLM Performance
+  - Latency percentiles (p50, p90, p99)
+  - Request rate and error rate
+- Resource Utilization
+  - Pod CPU and memory usage per pod
+  - Node CPU usage
+- Document Ingestion
+  - Document ingestion metrics by file type
+- Logging
+  - Live log stream
+  - Error log filtering
