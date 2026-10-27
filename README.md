@@ -184,3 +184,36 @@ cd terraform/dns_acm        && terraform apply
 # deploy app (ArgoCD handles this automatically on git push)
 kubectl apply -f k8s/argocd-app.yml
 ```
+
+---
+
+## 🎯 Key Design Decisions
+### Why ONNX over PyTorch for embeddings?
+Replaced sentence-transformers (PyTorch) with ChromaDB's
+ONNX runtime. Reduced Docker image from 9GB → 934MB (90%
+reduction) while maintaining same embedding quality.
+
+### Why 3 Terraform layers?
+Clean separation of concerns with isolated blast radius.
+Infrastructure changes rarely; K8s platform changes
+occasionally; DNS/ACM changes almost never. Separate state
+files prevent accidental infrastructure destruction when
+updating K8s resources.
+
+### Why OIDC over long-lived AWS credentials in CI/CD?
+GitHub Actions assumes an IAM role via OIDC federation.
+Credentials last 1 hour maximum, auto-expire, and are
+scoped to specific repo + branch + environment. No
+credentials stored anywhere.
+
+### Why External Secrets Operator?
+Single source of truth for secrets in AWS Secrets Manager.
+Kubernetes secrets auto-sync every hour. Rotating a secret
+in AWS automatically updates the pod environment — no
+redeployment needed.
+
+### Why Fluent Bit DaemonSet over static config?
+DaemonSet automatically deploys to every node including
+new nodes added by the autoscaler. Enriches logs with
+K8s metadata (namespace, pod, container) enabling
+structured log queries in Grafana/Loki.
