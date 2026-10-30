@@ -8,7 +8,7 @@ CI/CD pipeline.
 ---
 
 ## 🏗️ Architecture
-![RAG-system Architecture Diagram](architecture_diagram.jpg)
+![RAG-system Architecture Diagram](images/architecture_diagram.jpg)
 
 ---
 
@@ -36,16 +36,19 @@ CI/CD pipeline.
 ---
 
 ## 🔄 RAG Pipeline
-![RAG-system Pipeline](RAG_pipeline.png)
+![RAG-system Pipeline](images/RAG_pipeline.png)
 
 ---
 
 ## 🏗️ Infrastructure — 3 Terraform Layers
-![RAG-system Pipeline](terraform_structure.png)
+![RAG-system Pipeline](images/terraform_structure.png)
 
 ### Deploy Order
 
 ```bash
+# create S3 backend for remote state
+chmod 700 create-terraform-s3.sh
+./create-terraform-s3.sh
 # provision steps 
 cd terraform/infrastructure && terraform apply
 cd terraform/k8s_resources  && terraform apply
@@ -57,6 +60,29 @@ kubectl delete application rag-api -n argocd
 cd terraform/dns_acm        && terraform destroy
 cd terraform/k8s_resources  && terraform destroy
 cd terraform/infrastructure && terraform destroy
+```
+
+#### You may encounter DependencyViolation Error
+
+Terraform failed to delete the VPC because AWS resources, including an Application Load Balancer (ALB) and associated security groups, were still attached. The ALB cleanup was delayed by a Kubernetes Ingress finalizer (group.ingress.k8s.aws/platform), preventing complete infrastructure destruction.
+
+```bash
+# example VPC DependencyViolation Error
+Error: deleting EC2 VPC (vpc-0aece20bda6577e2e):
+operation error EC2: DeleteVpc,
+api error DependencyViolation:
+The vpc 'vpc-0aece20bda6577e2e' has dependencies
+and cannot be deleted.
+```
+
+#### Resolution
+Manually deleted the ALB and orphaned security groups in the AWS Console, then reran terraform destroy.
+
+```bash
+# check for orphaned resources
+
+chmod 700 check-vpc-dependencies.sh
+./check-vpc-dependencies.sh
 ```
 ---
 
@@ -78,7 +104,7 @@ cd terraform/infrastructure && terraform destroy
 ---
 
 ## ♾️ CI/CD Pipeline
-![CI/CD pipeline diagram](ci_cd.png)
+![CI/CD pipeline diagram](images/ci_cd.png)
 
 ---
 
@@ -104,7 +130,7 @@ Fluent Bit DaemonSet
   → ships to Loki
   → visualized in Grafana
 
-![FluentBit and Loki flow](fluent_bit_loki.png)
+![FluentBit and Loki flow](images/fluent_bit_loki.png)
 
 ### Dashboard
 
@@ -130,7 +156,7 @@ The dashboard provides the following monitoring features:
 ---
 
 ## 📁 Project Structure
-![Project folder structure](project_structure.png)
+![Project folder structure](images/project_structure.png)
 
 ---
 
